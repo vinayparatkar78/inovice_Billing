@@ -1,0 +1,147 @@
+<div class="container mt-5" [ngClass]="{ 'bg-dark text-white': isDarkMode, 'bg-light': !isDarkMode }">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">🧾 Invoice Management</h2>
+    <button class="btn btn-sm rounded-pill" [ngClass]="isDarkMode ? 'btn-light' : 'btn-dark'" (click)="toggleDarkMode()">
+      {{ isDarkMode ? '🌞 Light Mode' : '🌙 Dark Mode' }}
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [ngClass]="{ active: activeTab === 'create' }" (click)="activeTab = 'create'">➕ Create Invoice</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [ngClass]="{ active: activeTab === 'byId' }" (click)="activeTab = 'byId'">🔍 By Invoice ID</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [ngClass]="{ active: activeTab === 'byUser' }" (click)="activeTab = 'byUser'">📂 By User</button>
+    </li>
+  </ul>
+
+  <!-- Create Invoice Tab -->
+  <div *ngIf="activeTab === 'create'" class="card mb-5 shadow-lg rounded-4 border-0" [ngClass]="isDarkMode ? 'bg-secondary text-white' : 'bg-white'">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom" (click)="toggleInvoiceForm()" style="cursor: pointer;">
+      <h4 class="text-primary mb-0">
+        {{ showInvoiceForm ? '➖ Hide Invoice Form' : '➕ Create Invoice' }}
+      </h4>
+      <span class="badge bg-info text-dark">
+        {{ showInvoiceForm ? 'Click to Hide' : 'Click to Add New' }}
+      </span>
+    </div>
+
+    <form *ngIf="showInvoiceForm" [formGroup]="form" (ngSubmit)="submit()" class="p-4 pt-3">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <label class="form-label fw-semibold">👤 User ID <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-sm shadow-sm rounded" formControlName="userId" placeholder="Enter User GUID" />
+        </div>
+        <div class="col-lg-6">
+          <label class="form-label fw-semibold">💵 Amount <span class="text-danger">*</span></label>
+          <div class="input-group input-group-sm shadow-sm rounded">
+            <span class="input-group-text bg-light">₹</span>
+            <input type="number" class="form-control" formControlName="amount" placeholder="Enter amount" />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label class="form-label fw-semibold">📅 Due Date <span class="text-danger">*</span></label>
+          <input type="date" class="form-control form-control-sm shadow-sm rounded" formControlName="dueDate" />
+        </div>
+        <div class="col-lg-6">
+          <label class="form-label fw-semibold">💱 Currency <span class="text-danger">*</span></label>
+          <select class="form-select form-select-sm shadow-sm rounded" formControlName="currency">
+            <option value="" disabled selected>Select currency</option>
+            <option value="USD">USD</option>
+            <option value="INR">INR</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">🏢 Company ID <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-sm shadow-sm rounded" formControlName="companyId" placeholder="Enter Company GUID" />
+        </div>
+      </div>
+      <div class="mt-4">
+        <button class="btn btn-success w-100 py-2 rounded-pill shadow-sm" [disabled]="form.invalid">📤 Submit Invoice</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Fetch Invoice by ID Tab -->
+  <div *ngIf="activeTab === 'byId'" class="card p-4 mb-5 shadow-lg rounded-4 border-0" [ngClass]="isDarkMode ? 'bg-secondary text-white' : 'bg-white'">
+    <h4 class="text-info mb-3">🔍 Fetch Invoice by ID</h4>
+    <div class="input-group mb-3">
+      <input class="form-control form-control-sm" [(ngModel)]="invoiceId" name="invoiceId" placeholder="Enter Invoice ID (GUID)" />
+      <button class="btn btn-outline-info" (click)="fetchInvoiceById()">Fetch</button>
+    </div>
+
+    <div *ngIf="fetchedInvoice" class="alert" [ngClass]="isDarkMode ? 'alert-dark' : 'alert-info'">
+      <h5 class="mb-3">📋 Invoice Details</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>User ID:</strong> {{ fetchedInvoice.userId }}</li>
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>Amount:</strong> {{ fetchedInvoice.amount }}</li>
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>Currency:</strong> {{ fetchedInvoice.currency }}</li>
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>Company ID:</strong> {{ fetchedInvoice.companyId }}</li>
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>Due Date:</strong> {{ fetchedInvoice.dueDate | date:'medium' }}</li>
+        <li class="list-group-item" [ngClass]="isDarkMode ? 'bg-dark text-white' : ''"><strong>Created At:</strong> {{ fetchedInvoice.createdAt | date:'medium' }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Fetch by User ID Tab -->
+  <div *ngIf="activeTab === 'byUser'" class="card p-4 mb-5 shadow-lg rounded-4 border-0" [ngClass]="isDarkMode ? 'bg-secondary text-white' : 'bg-white'">
+    <h4 class="text-success mb-3">📂 Fetch Invoices by User</h4>
+    <div class="input-group mb-3">
+      <input class="form-control form-control-sm" [(ngModel)]="userIdToFetch" name="userIdToFetch" placeholder="Enter User ID (GUID)" />
+      <button class="btn btn-outline-success" (click)="fetchInvoicesByUser()">Fetch</button>
+    </div>
+
+    <div *ngIf="pagedInvoices.length > 0">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5>📑 User's Invoices (Page {{ currentPage + 1 }} of {{ totalPages }})</h5>
+        <div>
+          <button class="btn btn-outline-danger btn-sm me-2" (click)="exportPDF()">📄 Export PDF</button>
+          <button class="btn btn-outline-success btn-sm" (click)="exportExcel()">📊 Export Excel</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div *ngFor="let invoice of pagedInvoices" class="col-md-6 mb-3">
+          <div class="card h-100 shadow-sm" [ngClass]="isDarkMode ? 'bg-dark text-white border-light' : 'bg-light'">
+            <div class="card-body">
+              <p><strong>💵 Amount:</strong> {{ invoice.amount }}</p>
+              <p><strong>💱 Currency:</strong> {{ invoice.currency }}</p>
+              <p><strong>🏢 Company ID:</strong> {{ invoice.companyId }}</p>
+              <p><strong>📅 Due Date:</strong> {{ invoice.dueDate | date:'medium' }}</p>
+              <p><strong>🕒 Created At:</strong> {{ invoice.createdAt | date:'medium' }}</p>
+              <button class="btn btn-outline-primary mt-2" (click)="downloadInvoice(invoice['id'])">⬇️ Download PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <nav *ngIf="totalPages > 1" class="d-flex justify-content-between align-items-center mt-4">
+        <button class="btn btn-outline-primary rounded-pill px-4" [disabled]="currentPage === 0" (click)="prevPage()">◀ Previous</button>
+        <span class="mx-3 fw-semibold">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+        <button class="btn btn-outline-primary rounded-pill px-4" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">Next ▶</button>
+      </nav>
+    </div>
+
+    <div *ngIf="!fetchedUserInvoices.length && userIdToFetch" class="alert alert-warning mt-3">
+      ⚠ No invoices found for the entered User ID.
+    </div>
+  </div>
+
+  <p>NEED TO PAY? 
+    <a [routerLink]="['/payment']" style="color: #1976d2; text-decoration: underline;">PAY HERE</a>
+  </p>
+
+  <p>NEED TO SEE THE REPORT OR DOWNLOAD SUMMARY REPORT? 
+    <a [routerLink]="['/report']" style="color: #1976d2; text-decoration: underline;">CLICK HERE</a>
+  </p>
+
+
+</div>

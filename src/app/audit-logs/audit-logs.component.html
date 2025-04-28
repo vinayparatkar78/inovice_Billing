@@ -1,0 +1,64 @@
+<mat-tab-group class="m-4">
+    <!-- By Audit ID -->
+    <mat-tab label="By Audit ID">
+      <div class="p-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Audit ID</mat-label>
+          <input matInput [(ngModel)]="auditId" placeholder="Enter Audit ID">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="fetchByAuditId()">Search</button>
+  
+        <mat-card class="mt-4" *ngIf="auditById">
+            <h3 class="mb-3">🔍 Audit Log Details</h3>
+          
+            <ng-container *ngIf="isArray(auditById); else singleAudit">
+              <div *ngFor="let log of auditById" class="mb-3 border-bottom pb-2">
+                <p><strong>🆔 ID:</strong> {{ log.id }}</p>
+                <p><strong>📝 Action:</strong> {{ log.action }}</p>
+                <p><strong>👤 Performed By:</strong> {{ log.performedBy }}</p>
+                <p><strong>🕒 Timestamp:</strong> {{ log.timestamp | date: 'medium' }}</p>
+                <p><strong>📄 Details:</strong> {{ log.details }}</p>
+              </div>
+            </ng-container>
+          
+            <ng-template #singleAudit>
+              <p><strong>🆔 ID:</strong> {{ auditById.id }}</p>
+              <p><strong>📝 Action:</strong> {{ auditById.action }}</p>
+              <p><strong>👤 Performed By:</strong> {{ auditById.performedBy }}</p>
+              <p><strong>🕒 Timestamp:</strong> {{ auditById.timestamp | date: 'medium' }}</p>
+              <p><strong>📄 Details:</strong> {{ auditById.details }}</p>
+            </ng-template>
+          </mat-card>
+          
+      </div>
+    </mat-tab>
+  
+    <!-- By Email -->
+    <mat-tab label="By Email">
+      <div class="p-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>User Email</mat-label>
+          <input matInput [(ngModel)]="auditEmail" placeholder="Enter user email">
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="fetchByEmail()">Search</button>
+  
+        <mat-card class="mt-4" *ngIf="auditByEmail?.length > 0">
+            <h3 class="mb-3">📧 Audit Logs for Email</h3>
+          
+            <div *ngFor="let log of auditByEmail" class="mb-3 border-bottom pb-2">
+              <p><strong>🆔 ID:</strong> {{ log.id }}</p>
+              <p><strong>📝 Action:</strong> {{ log.action }}</p>
+              <p><strong>👤 Performed By:</strong> {{ log.performedBy }}</p>
+              <p><strong>🕒 Timestamp:</strong> {{ log.timestamp | date: 'medium' }}</p>
+              <p><strong>📄 Details:</strong> {{ log.details }}</p>
+            </div>
+          </mat-card>
+          
+          <mat-card *ngIf="auditByEmail?.length === 0">
+            <p>No audit logs found for the provided email.</p>
+          </mat-card>
+          
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  

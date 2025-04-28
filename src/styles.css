@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+body.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  .dark-theme .card, 
+  .dark-theme .form-control {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #333;
+  }
+  
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

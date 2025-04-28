@@ -1,0 +1,18 @@
+.dashboard-card {
+    margin: 2rem auto;
+    max-width: 1000px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .dashboard-title {
+    text-align: center;
+    color: #d32f2f;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tab-content {
+    padding: 1rem 0;
+  }
+  

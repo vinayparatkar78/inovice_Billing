@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm border border-primary">
+      <h3 class="mb-4 text-center">Generate OTP</h3>
+      <form [formGroup]="otpForm" (ngSubmit)="generateOtp()">
+        <div class="mb-3">
+          <label for="userId" class="form-label">User ID</label>
+          <input id="userId" class="form-control" formControlName="userId" placeholder="Enter your user ID" />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" class="form-control" formControlName="email" placeholder="Enter your email" />
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input id="phone" class="form-control" formControlName="phone" placeholder="Enter your phone" />
+        </div>
+        <button type="submit" class="btn btn-success w-100">Send OTP</button>
+      </form>
+    </div>
+  </div>
+  

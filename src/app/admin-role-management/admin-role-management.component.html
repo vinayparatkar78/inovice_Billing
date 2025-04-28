@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm" style="border-top: 5px solid #2e7d32;">
+      <h2 class="text-center mb-4 text-success">Assign Role</h2>
+      
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="mb-3">
+          <label for="userId" class="form-label">User ID</label>
+          <input id="userId" type="text" class="form-control" formControlName="userId" placeholder="Enter user ID" />
+        </div>
+  
+        <div class="mb-3">
+          <label for="role" class="form-label">Select Role</label>
+          <select id="role" class="form-select" formControlName="role">
+            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+          </select>
+        </div>
+  
+        <button class="btn btn-success w-100" type="submit">Assign Role</button>
+      </form>
+    </div>
+  </div>
+  

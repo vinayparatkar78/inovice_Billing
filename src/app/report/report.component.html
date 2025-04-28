@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm border border-secondary">
+    <h3 class="mb-4 text-center">📊 Report Dashboard</h3>
+
+    <form [formGroup]="form" class="row g-3" (ngSubmit)="fetchSummary()">
+      <div class="col-md-6">
+        <label class="form-label">Start Date</label>
+        <input type="date" class="form-control" formControlName="startDate" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">End Date</label>
+        <input type="date" class="form-control" formControlName="endDate" />
+      </div>
+
+      <div class="col-12 text-center mt-3">
+        <button type="submit" class="btn btn-primary me-2">
+          <i class="bi bi-graph-up-arrow"></i> Get Summary
+        </button>
+        <button type="button" class="btn btn-danger me-2" (click)="downloadPdf()">
+          <i class="bi bi-file-earmark-pdf"></i> Download PDF
+        </button>
+        <button type="button" class="btn btn-success" (click)="downloadExcel()">
+          <i class="bi bi-file-earmark-excel"></i> Download Excel
+        </button>
+      </div>
+    </form>
+
+<!-- Summary Items (excluding topCustomers) -->
+<div *ngIf="summary" class="grid grid-cols-2 gap-4 mt-4">
+  <div *ngFor="let entry of summary | keyvalue">
+    <div *ngIf="entry.key !== 'topCustomers'" class="p-4 rounded-lg shadow bg-white dark:bg-gray-800">
+      <h6 class="card-title text-primary text-capitalize">
+        {{ formatKey(entry.key) }}
+
+      </h6>
+      <p class="text-gray-700 dark:text-gray-200">
+        {{ entry.value }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Top Customers -->
+<div *ngIf="summary?.topCustomers?.length" class="mt-5">
+  <h5 class="text-center text-primary mb-3">Top Customers</h5>
+  <div *ngFor="let customer of summary.topCustomers" class="p-3 border rounded mb-2 shadow-sm">
+    <p><strong>User ID:</strong> {{ customer.userId }}</p>
+    <p><strong>Total Spent:</strong> ₹{{ customer.totalSpent }}</p>
+  </div>
+</div>
+
+
+    
+
+    <div *ngIf="summary?.length" class="grid grid-cols-2 gap-4 mt-4">
+      <div *ngFor="let item of summary" class="p-4 rounded-lg shadow bg-white dark:bg-gray-800">
+        <div *ngFor="let entry of item | keyvalue">
+          <h6 class="card-title text-primary text-capitalize">
+            {{ formatKey(entry.key) }}
+
+          </h6>
+          <p class="text-gray-700 dark:text-gray-200">
+            {{ entry.value }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

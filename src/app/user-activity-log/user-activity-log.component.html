@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>User ID</mat-label>
+    <input matInput [(ngModel)]="userId" placeholder="Enter User ID">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="getUserActivity()">Fetch Activity Logs</button>
+  <button mat-raised-button color="accent" (click)="logDummyActivity()">Log Dummy Activity</button>
+</mat-card>
+
+<mat-card *ngIf="activityLogs.length">
+  <h2>User Activity Logs</h2>
+<ul>
+  <li *ngFor="let log of activityLogs">
+    <div><strong>IP Address:</strong> {{ log.ipAddress }}</div>
+    <div><strong>Network Address:</strong> {{ log.networkAddress }}</div>
+    <div><strong>Device:</strong> {{ log.device }}</div>
+    <div><strong>Browser:</strong> {{ log.browser }}</div>
+    <div><strong>OS:</strong> {{ log.os }}</div>
+    <div><strong>Country:</strong> {{ log.country }}</div>
+    <div><strong>City:</strong> {{ log.city }}</div>
+    <div><strong>Region:</strong> {{ log.region }}</div>
+    <div><strong>ISP:</strong> {{ log.isp }}</div>
+    <div><strong>ASN:</strong> {{ log.asn }}</div>
+    <div><strong>Organization:</strong> {{ log.organization }}</div>
+    <div><strong>Activity Time:</strong> {{ log.activityTime | date: 'medium' }}</div>
+    <div><strong>Activity End Time:</strong> {{ log.activityEndTime | date: 'medium' }}</div>
+    <div><strong>Session Duration:</strong> {{ log.sessionDuration }} seconds</div>
+    <hr />
+  </li>
+</ul>
+
+</mat-card>
